@@ -2,12 +2,13 @@ import { useState } from 'react'
 import axios from 'axios'
 
 function App() {
-  let inputUrl = ""
+  const [inputUrl, setInputUrl] = useState(""); // Use state for the input URL
+  const [urlAlias, setUrlAlias] = useState("");
   const [shortUrl, setShortUrl] = useState("")
 
   async function getShortUrlFromBackend(){
     let backendUrl = getBackendUrl()
-    let payload = {url: inputUrl}
+    let payload = {url: inputUrl, customCode: urlAlias}
     try {
       const result = await postData(backendUrl, payload);
       setShortUrl(result.shortUrl)
@@ -39,8 +40,12 @@ function App() {
   return (
     <>
       <textarea onChange = {(e) => {
-        inputUrl = e.target.value
+        setInputUrl(e.target.value)
       }} placeholder='Enter your url' cols="30" rows="10"></textarea>
+
+      <input onChange = {(e) => {
+        setUrlAlias(e.target.value)
+      }}type="text" placeholder='Enter your alias' />
       
       <button onClick={getShortUrlFromBackend}>Submit</button>
       
